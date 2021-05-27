@@ -103,10 +103,16 @@ class PowerDifferenceOp : public OpKernel {
       for (int i = 0; i < N; i++) {
         //output(i) = (input_x(i) - input_y(i)) * (input_x(i) - input_y(i));
         tmp = input_x(i) - input_y(i);
-        output(i) = tmp;
-        for (int j = 0; j < POW - 1; j++){
-          output(i) = output(i) * tmp;
+        output(i) = 1;
+        int j = POW;
+        while (j) {
+          if (j & 1) output(i) *= tmp;
+          j >>= 1;
+          tmp *= tmp;
         }
+        // for (int j = 0; j < POW - 1; j++){
+        //   output(i) = output(i) * tmp;
+        // }
       }
     }
 };
